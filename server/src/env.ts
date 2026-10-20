@@ -11,6 +11,7 @@ const envSchema = z.object({
   MAIL_FROM: z.string().default("Snapbox <no-reply@example.com>"),
   DAILY_EMAIL_LIMIT: z.coerce.number().default(200),
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace"]).default("info"),
+  RESEND_API_KEY: z.string().optional(),
 })
 
 const parsed = envSchema.safeParse(process.env)

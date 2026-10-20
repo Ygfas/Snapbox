@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Download, Mail, RotateCcw, Share2, Printer, Pencil } from "lucide-react"
+import { Download, RotateCcw, Share2, Printer, Pencil } from "lucide-react"
 import { i18n } from "../../i18n/id"
 import { Button } from "../ui/Button"
 import { Kbd } from "../ui/Kbd"
@@ -8,7 +8,6 @@ interface ResultViewProps {
   resultUrl: string | null
   resultBlob: Blob | null
   onRetakeAll: () => void
-  onOpenEmail: () => void
   onBackToReview?: () => void
 }
 
@@ -16,7 +15,6 @@ export const ResultView: React.FC<ResultViewProps> = ({
   resultUrl,
   resultBlob,
   onRetakeAll,
-  onOpenEmail,
   onBackToReview,
 }) => {
   const [copied, setCopied] = useState(false)
@@ -91,10 +89,6 @@ export const ResultView: React.FC<ResultViewProps> = ({
         <div className="flex flex-col gap-3 mt-4">
           <Button onClick={handleDownload} size="lg">
             <Download size={20} /> Unduh <Kbd>D</Kbd>
-          </Button>
-
-          <Button onClick={onOpenEmail} variant="secondary">
-            <Mail size={20} /> Kirim Email <Kbd>E</Kbd>
           </Button>
 
           <Button onClick={handlePrint} variant="secondary">

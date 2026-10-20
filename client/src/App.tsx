@@ -15,7 +15,6 @@ import { Countdown } from "./components/booth/Countdown"
 import { ShotStrip } from "./components/booth/ShotStrip"
 import { ResultView } from "./components/booth/ResultView"
 import { GalleryGrid } from "./components/gallery/GalleryGrid"
-import { EmailDialog } from "./components/email/EmailDialog"
 import { Button } from "./components/ui/Button"
 import { Segmented } from "./components/ui/Segmented"
 import { Switch } from "./components/ui/Switch"
@@ -158,8 +157,6 @@ export function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const [isEmailOpen, setIsEmailOpen] = useState(false)
-
   const totalShots = LAYOUTS[layoutCode].photoCount
   const filterCss = FILTERS[filter]?.cssFilter ?? "none"
   const isResult = captureState === "result"
@@ -202,7 +199,6 @@ export function App() {
     },
     onEscape: () => {
       setIsHelpOpen(false)
-      setIsEmailOpen(false)
       // Esc saat retake = batalkan retake saja (foto lain aman),
       // selain itu batalkan sesi seperti biasa.
       if (retakingIndex !== null) {
@@ -241,9 +237,6 @@ export function App() {
         a.download = `snapbox_${Date.now()}.jpg`
         a.click()
       }
-    },
-    onEmailResult: () => {
-      if (resultBlob) setIsEmailOpen(true)
     },
   })
 
@@ -495,7 +488,6 @@ export function App() {
                 resultUrl={resultUrl}
                 resultBlob={resultBlob}
                 onRetakeAll={resetToReady}
-                onOpenEmail={() => setIsEmailOpen(true)}
                 onBackToReview={backToReview}
               />
             )}
@@ -515,12 +507,6 @@ export function App() {
       </div>
 
       <ShortcutHelp />
-
-      <EmailDialog
-        isOpen={isEmailOpen}
-        onClose={() => setIsEmailOpen(false)}
-        photos={resultBlob ? [resultBlob] : []}
-      />
     </div>
   )
 }

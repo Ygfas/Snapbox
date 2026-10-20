@@ -4,7 +4,6 @@ import helmet from "helmet"
 import rateLimit from "express-rate-limit"
 import pino from "pino"
 import { config } from "./env.js"
-import { emailRouter } from "./routes/email.js"
 
 const logger = pino({ level: config.LOG_LEVEL })
 
@@ -26,8 +25,6 @@ app.use("/api", limiter)
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true })
 })
-
-app.use("/api", emailRouter)
 
 app.use((_req, res) => {
   res.status(404).json({ ok: false, code: "NOT_FOUND", message: "Endpoint tidak ditemukan" })
