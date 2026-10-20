@@ -32,7 +32,7 @@ export const ShotStrip: React.FC<ShotStripProps> = ({
 
   return (
     <>
-      <div className="flex gap-3 overflow-x-auto py-2">
+      <div className="flex gap-3 overflow-x-auto py-2 justify-center mx-auto">
         {Array.from({ length: total }).map((_, idx) => {
           const blob = shots[idx]
           const isRetaking = retakingIndex === idx

@@ -13,6 +13,8 @@ interface UIState {
   mirror: boolean
   filter: FilterId
   frameColor: string
+  frameId: string | null
+  customBgDataUrl: string | null
   footerText: string
   soundEnabled: boolean
   ttlDays: number
@@ -28,6 +30,8 @@ interface UIState {
   setMirror: (mirror: boolean) => void
   setFilter: (filter: FilterId) => void
   setFrameColor: (color: string) => void
+  setFrameId: (id: string | null) => void
+  setCustomBgDataUrl: (url: string | null) => void
   setFooterText: (text: string) => void
   setSoundEnabled: (enabled: boolean) => void
   setTtlDays: (days: number) => void
@@ -47,6 +51,8 @@ export const useUIStore = create<UIState>((set) => ({
   mirror: true,
   filter: "normal",
   frameColor: "#FFFFFF",
+  frameId: null,
+  customBgDataUrl: null,
   footerText: "",
   soundEnabled: false,
   ttlDays: 7,
@@ -61,7 +67,9 @@ export const useUIStore = create<UIState>((set) => ({
   setTimerDuration: (timerDuration) => set({ timerDuration }),
   setMirror: (mirror) => set({ mirror }),
   setFilter: (filter) => set({ filter }),
-  setFrameColor: (frameColor) => set({ frameColor }),
+  setFrameColor: (frameColor) => set({ frameColor, frameId: null }),
+  setFrameId: (frameId) => set({ frameId }),
+  setCustomBgDataUrl: (customBgDataUrl) => set({ customBgDataUrl }),
   setFooterText: (footerText) => set({ footerText }),
   setSoundEnabled: (soundEnabled) => set({ soundEnabled }),
   setTtlDays: (ttlDays) => set({ ttlDays }),

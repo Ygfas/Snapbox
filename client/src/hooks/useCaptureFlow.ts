@@ -19,6 +19,8 @@ interface UseCaptureFlowProps {
   mirror: boolean
   filter: FilterId
   frameColor: string
+  frameId?: string | null
+  customBgDataUrl?: string | null
   footerText: string
   videoRef: { current: HTMLVideoElement | null }
   onSaveCapture: (capture: {
@@ -27,7 +29,14 @@ interface UseCaptureFlowProps {
     thumb: Blob
     shots: Blob[]
     layout: LayoutCode
-    style: { frameColor: string; footerText: string; filter: FilterId; stickers: Sticker[] }
+    style: {
+      frameColor: string
+      footerText: string
+      filter: FilterId
+      stickers: Sticker[]
+      frameId?: string | null
+      customBgDataUrl?: string | null
+    }
     width: number
     height: number
     bytes: number
@@ -40,6 +49,8 @@ export function useCaptureFlow({
   mirror,
   filter,
   frameColor,
+  frameId,
+  customBgDataUrl,
   footerText,
   videoRef,
   onSaveCapture,
@@ -345,6 +356,9 @@ export function useCaptureFlow({
       shots.map((s) => s.size).join(","),
       shotFilters.join(","),
       frameColor,
+      frameId ?? "",
+      (customBgDataUrl ?? "").slice(0, 64),
+      (customBgDataUrl ?? "").length,
       footerText,
       filter,
     ].join("|")
@@ -367,6 +381,8 @@ export function useCaptureFlow({
         shots,
         layout: layoutCode,
         frameColor,
+        frameId: frameId ?? undefined,
+        customBgDataUrl: customBgDataUrl ?? null,
         footerText,
         filter,
         shotFilters,
@@ -384,7 +400,7 @@ export function useCaptureFlow({
       if (previewReqRef.current === req) setIsPreviewLoading(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shots, shotFilters, layoutCode, frameColor, footerText, filter])
+  }, [shots, shotFilters, layoutCode, frameColor, frameId, customBgDataUrl, footerText, filter])
 
   // Otomatis susun ulang pratinjau saat reviewing dan ada perubahan
   useEffect(() => {
@@ -421,6 +437,8 @@ export function useCaptureFlow({
           shots,
           layout: layoutCode,
           frameColor,
+          frameId: frameId ?? undefined,
+          customBgDataUrl: customBgDataUrl ?? null,
           footerText,
           filter,
           shotFilters,
@@ -432,7 +450,7 @@ export function useCaptureFlow({
       }
 
       const thumb = await createThumbnail(blob, 320)
-      const style = { frameColor, footerText, filter, stickers: [] }
+      const style = { frameColor, frameId, customBgDataUrl, footerText, filter, stickers: [] }
 
       // Pakai id yang sama bila sudah pernah disimpan (edit ulang) agar
       // tidak duplikat di galeri — App melakukan upsert by id.
@@ -459,7 +477,7 @@ export function useCaptureFlow({
       setState("reviewing")
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shots, shotFilters, layoutCode, frameColor, footerText, filter, onSaveCapture, resultUrl])
+  }, [shots, shotFilters, layoutCode, frameColor, frameId, customBgDataUrl, footerText, filter, onSaveCapture, resultUrl])
 
   // Kembali dari result ke reviewing untuk edit lagi (shots utuh,
   // simpan ulang akan update record yang sama — tidak duplikat).

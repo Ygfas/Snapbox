@@ -20,6 +20,7 @@ import { Button } from "./components/ui/Button"
 import { Segmented } from "./components/ui/Segmented"
 import { Switch } from "./components/ui/Switch"
 import { SwatchPicker } from "./components/ui/SwatchPicker"
+import { FramePicker } from "./components/booth/FramePicker"
 import { Kbd } from "./components/ui/Kbd"
 import { LAYOUTS, type LayoutCode } from "./config/layouts"
 import { FILTERS, type FilterId } from "./config/filters"
@@ -42,6 +43,10 @@ export function App() {
     setFilter,
     frameColor,
     setFrameColor,
+    frameId,
+    setFrameId,
+    customBgDataUrl,
+    setCustomBgDataUrl,
     footerText,
     setFooterText,
     setIsHelpOpen,
@@ -93,6 +98,8 @@ export function App() {
         footerText: string
         filter: FilterId
         stickers: Sticker[]
+        frameId?: string | null
+        customBgDataUrl?: string | null
       }
       width: number
       height: number
@@ -134,10 +141,22 @@ export function App() {
     mirror,
     filter,
     frameColor,
+    frameId,
+    customBgDataUrl,
     footerText,
     videoRef,
     onSaveCapture: handleSaveCapture,
   })
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("snapbox-custom-bg")
+      if (saved && !customBgDataUrl) setCustomBgDataUrl(saved)
+    } catch {
+      // abaikan
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const [isEmailOpen, setIsEmailOpen] = useState(false)
 
@@ -241,7 +260,7 @@ export function App() {
               background — saat kembali, gambar kamera langsung terlihat
               instan tanpa blackscreen lama. */}
           <div
-            className={`flex-1 flex-col lg:flex-row gap-6 p-6 overflow-y-auto items-center justify-center ${
+            className={`flex-1 flex-col lg:flex-row gap-6 p-6 overflow-y-auto items-start justify-start lg:justify-center lg:items-start ${
               activeTab === "booth" ? "flex visible static" : "flex invisible absolute inset-0 pointer-events-none"
             }`}
           >
@@ -399,6 +418,18 @@ export function App() {
                           Warna Bingkai
                         </label>
                         <SwatchPicker value={frameColor} onChange={setFrameColor} />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-[var(--color-muted)]">
+                          Frame Unik (20 + Custom)
+                        </label>
+                        <FramePicker
+                          selectedFrameId={frameId}
+                          onSelectFrame={setFrameId}
+                          customBgDataUrl={customBgDataUrl}
+                          onCustomBgChange={setCustomBgDataUrl}
+                        />
                       </div>
 
                       <div className="space-y-2">

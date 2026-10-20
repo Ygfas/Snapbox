@@ -31,6 +31,8 @@ export interface Capture {
     footerText: string
     filter: FilterId
     stickers: Sticker[]
+    frameId?: string | null
+    customBgDataUrl?: string | null
   }
   width: number
   height: number
